@@ -1,0 +1,35 @@
+/* Figma mobile Lead Module refinement: success feedback remains compact, centered, and fully contained on narrow screens. */
+@media (max-width: 767px) {
+  .lead-mobile-detail__actions button.lead-mobile-detail__contact-action {
+    border-color: #c3f400 !important;
+    background: #c3f400 !important;
+    color: #10140f !important;
+  }
+
+  .lead-mobile-detail__actions button.lead-mobile-detail__contact-action svg {
+    color: #10140f !important;
+  }
+
+  .lead-mobile-modal-backdrop {
+    box-sizing: border-box;
+    padding: 16px;
+  }
+
+  .lead-mobile-feedback.is-success {
+    box-sizing: border-box;
+    width: min(100%, 356px);
+    max-width: 356px;
+    min-height: 304px;
+    align-content: center;
+    justify-items: center;
+    padding: 34px 24px 28px;
+  }
+
+  .lead-mobile-feedback.is-success .lead-mobile-lime {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    margin: 0;
+  }
+}

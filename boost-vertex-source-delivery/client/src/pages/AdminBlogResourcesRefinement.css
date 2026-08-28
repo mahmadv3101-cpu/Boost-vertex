@@ -1,0 +1,14 @@
+.blog-list-toolbar>.blog-search>svg{
+  position:static !important;
+  right:auto !important;
+  flex:0 0 auto;
+  pointer-events:none;
+}
+
+@media (max-width:767px){
+  .blog-list-toolbar>.blog-search>svg{
+    position:static !important;
+    right:auto !important;
+    margin-left:12px;
+  }
+}

@@ -1,0 +1,30 @@
+.casev2-page {
+  padding-top: 84px;
+}
+
+.casev2-table-row .casev2-actions button:nth-child(n + 2) {
+  display: none;
+}
+
+.casev2-editor-breadcrumb {
+  position: relative;
+  z-index: 2;
+  height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.casev2-editor-breadcrumb > span {
+  display: none;
+}
+
+.casev2-editor-breadcrumb > div {
+  position: absolute;
+  top: 13px;
+  right: max(42px, calc((100vw - 922px) / 2));
+}
+
+.casev2-editor-heading {
+  padding-top: 52px;
+}

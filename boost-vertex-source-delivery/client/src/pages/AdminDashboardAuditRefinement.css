@@ -1,0 +1,5 @@
+@media (max-width:767px){
+  .dash-topbar .dash-topbar__right{
+    display:none !important;
+  }
+}

@@ -1,0 +1,211 @@
+/* Shared site-motion contract: preserve the Figma-approved obsidian composition while adding restrained lime-forward feedback, view-based section reveals, and full-width distributed desktop navigation. */
+
+@media (min-width: 1024px) {
+  .Desktop > .Topnavbar {
+    width: 100vw !important;
+    max-width: 100vw !important;
+  }
+
+  .mv-header__inner,
+  .about-header__inner {
+    width: calc(100% - clamp(64px, 6vw, 112px));
+    max-width: none;
+    padding-inline: 0;
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr) max-content;
+    gap: 0;
+  }
+
+  .mv-brand,
+  .about-brand { justify-self: start; }
+
+  .mv-nav,
+  .about-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px !important;
+    margin-right: clamp(32px, 5vw, 96px);
+    margin-left: clamp(44px, 9vw, 180px);
+    justify-self: stretch;
+  }
+
+  .mv-nav > a,
+  .about-nav > a { margin: 0 !important; padding-inline: 0 !important; white-space: nowrap; }
+
+  .mv-header__actions,
+  .about-header__actions { justify-self: end; }
+
+  .Topnavbar {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .Topnavbar > .home-header-brand {
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  .Topnavbar > .home-header-nav {
+    position: static;
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px !important;
+  }
+
+  .Topnavbar > .home-header-nav > a { padding-inline: 4px !important; }
+
+  .Topnavbar > .home-header-actions {
+    position: static;
+    grid-column: 3;
+    justify-self: end;
+    margin-left: 0;
+  }
+}
+
+@media (min-width: 1560px) {
+  .Topnavbar > .home-header-nav {
+    transform: translateX(calc((100vw - 1560px) / 2 - 32px));
+  }
+}
+
+/* Interaction coverage for pages that rely on shared cards/actions rather than route-specific motion sheets. */
+:is(.mv-page, .mv-blog-detail-page, .mv-industry-page, .about-page, .Desktop) :is(.mv-button, .about-button, [data-action]) {
+  transition: transform 180ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 180ms ease-out, border-color 180ms ease-out, background-color 180ms ease-out, color 180ms ease-out, filter 180ms ease-out;
+}
+
+:is(.mv-page, .mv-blog-detail-page, .about-page, .Desktop) [class*="card"],
+.Desktop [data-layer*="Card"] {
+  transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1), border-color 220ms ease-out, box-shadow 220ms ease-out, background-color 220ms ease-out;
+  will-change: transform;
+}
+
+:is(.mv-page, .mv-blog-detail-page, .about-page, .Desktop) [class*="card"]:hover,
+.Desktop [data-layer*="Card"]:hover {
+  border-color: rgba(195, 244, 0, 0.58);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.24);
+  transform: translateY(-5px);
+}
+
+:is(.mv-page, .mv-blog-detail-page, .about-page, .Desktop) [class*="card"] img,
+.Desktop [data-layer*="Card"] img {
+  transition: transform 420ms cubic-bezier(0.23, 1, 0.32, 1), filter 220ms ease-out;
+}
+
+:is(.mv-page, .mv-blog-detail-page, .about-page, .Desktop) [class*="card"]:hover img,
+.Desktop [data-layer*="Card"]:hover img {
+  filter: brightness(1.04) saturate(1.05);
+  transform: scale(1.035);
+}
+
+:is(.mv-page, .mv-blog-detail-page, .mv-industry-page, .about-page, .Desktop) :is(.mv-button, .about-button, [data-action]):hover {
+  transform: translateY(-2px);
+}
+
+:is(.mv-page, .mv-blog-detail-page, .mv-industry-page, .about-page, .Desktop) :is(.mv-button, .about-button, [data-action]):active {
+  transform: translateY(0) scale(0.97);
+}
+
+.mv-nav a,
+.about-nav a,
+.home-header-nav a {
+  position: relative;
+  transition: color 180ms ease-out, transform 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.mv-nav a::after,
+.about-nav a::after,
+.home-header-nav a::after {
+  position: absolute;
+  right: 0;
+  bottom: -8px;
+  left: 0;
+  height: 1px;
+  background: var(--bv-lime);
+  content: "";
+  opacity: 0;
+  transform: scaleX(0.45);
+  transition: opacity 180ms ease-out, transform 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.mv-nav a:hover::after,
+.mv-nav a:focus-visible::after,
+.mv-nav a[aria-current="page"]::after,
+.about-nav a:hover::after,
+.about-nav a:focus-visible::after,
+.about-nav a[aria-current="page"]::after,
+.home-header-nav a:hover::after,
+.home-header-nav a:focus-visible::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+/* The editorial and utility pages use distinct root classes, so they receive the same lightweight motion without a visual redesign. */
+:is(.mv-blog-page, .mv-contact-page, .mv-privacy-page, .mv-thank-page) :is(.mv-button, [data-action], button) {
+  transition: transform 180ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 180ms ease-out, border-color 180ms ease-out, background-color 180ms ease-out, color 180ms ease-out;
+}
+
+:is(.mv-blog-page, .mv-contact-page, .mv-privacy-page, .mv-thank-page) :is([class*="card"], article) {
+  transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1), border-color 220ms ease-out, box-shadow 220ms ease-out, background-color 220ms ease-out;
+}
+
+:is(.mv-blog-page, .mv-contact-page, .mv-privacy-page, .mv-thank-page) :is([class*="card"], article):hover {
+  border-color: rgba(195, 244, 0, 0.55);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22);
+  transform: translateY(-4px);
+}
+
+:is(.mv-blog-page, .mv-contact-page, .mv-privacy-page, .mv-thank-page) :is([class*="card"], article) img {
+  transition: transform 420ms cubic-bezier(0.23, 1, 0.32, 1), filter 220ms ease-out;
+}
+
+:is(.mv-blog-page, .mv-contact-page, .mv-privacy-page, .mv-thank-page) :is([class*="card"], article):hover img {
+  filter: brightness(1.04) saturate(1.05);
+  transform: scale(1.03);
+}
+
+:is(.mv-blog-page, .mv-contact-page, .mv-privacy-page, .mv-thank-page) :is(.mv-button, [data-action], button):hover {
+  transform: translateY(-2px);
+}
+
+:is(.mv-blog-page, .mv-contact-page, .mv-privacy-page, .mv-thank-page) :is(.mv-button, [data-action], button):active {
+  transform: translateY(0) scale(0.97);
+}
+
+@keyframes mv-site-section-in {
+  from { opacity: 0.86; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@supports (animation-timeline: view()) {
+  main > section:not([data-page-reveal]) {
+    animation: mv-site-section-in linear both;
+    animation-range: entry 4% cover 20%;
+    animation-timeline: view();
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mv-nav a,
+  .mv-nav a::after,
+  .about-nav a,
+  .about-nav a::after,
+  .home-header-nav a,
+  .home-header-nav a::after,
+  :is(.mv-page, .mv-blog-detail-page, .mv-industry-page, .about-page, .Desktop) :is(.mv-button, .about-button, [data-action]),
+  :is(.mv-page, .mv-blog-detail-page, .about-page, .Desktop) [class*="card"],
+  :is(.mv-page, .mv-blog-detail-page, .about-page, .Desktop) [class*="card"] img,
+  .Desktop [data-layer*="Card"],
+  .Desktop [data-layer*="Card"] img,
+  :is(.mv-blog-page, .mv-contact-page, .mv-privacy-page, .mv-thank-page) :is(.mv-button, [data-action], button),
+  :is(.mv-blog-page, .mv-contact-page, .mv-privacy-page, .mv-thank-page) :is([class*="card"], article),
+  :is(.mv-blog-page, .mv-contact-page, .mv-privacy-page, .mv-thank-page) :is([class*="card"], article) img,
+  main > section:not([data-page-reveal]) {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}
