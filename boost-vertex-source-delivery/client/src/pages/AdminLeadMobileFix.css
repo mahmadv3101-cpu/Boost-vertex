@@ -32,4 +32,24 @@
     max-width: 100%;
     margin: 0;
   }
+
+  /* Media Library mobile: Figma has no persistent bottom icon tray. */
+  .admin-dashboard:has(.media-library-module) .dash-mobile-bottom-nav {
+    display: none !important;
+  }
+
+  /* Keep the upload plus perfectly centered inside its circular button. */
+  .media-library-heading > .media-lime-button {
+    display: grid !important;
+    place-items: center !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+  }
+
+  .media-library-heading > .media-lime-button svg {
+    display: block;
+    margin: 0 !important;
+    flex: none;
+    transform: none !important;
+  }
 }
