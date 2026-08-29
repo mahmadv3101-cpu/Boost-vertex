@@ -1,4 +1,5 @@
-import { Bell, BriefcaseBusiness, Building2, FolderKanban, Image, LayoutDashboard, LogOut, Menu, MessageSquare, Newspaper, Search, Settings, UserRound, UsersRound } from "lucide-react";
+import { Bell, BriefcaseBusiness, Building2, FolderKanban, Image, LayoutDashboard, LogOut, Menu, MessageSquare, Newspaper, Search, Settings, UserRound, UsersRound, X } from "lucide-react";
+import { useState } from "react";
 import { useLocation } from "wouter";
 import { authService } from "@/services/authService";
 import "./AdminDashboard.css";
@@ -26,22 +27,30 @@ const navigation = [
 
 export function SettingsDashboard() {
   const [, setLocation] = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const settingsStyle = { "--settings-avatar-image": `url("${settingsAvatarSrc}")` } as React.CSSProperties;
-  return <main className="admin-dashboard industry-detail-shell settings-dashboard-shell" style={settingsStyle}>
+  const navigate = (path: string) => { setMobileMenuOpen(false); setLocation(path); };
+
+  return <main className={`admin-dashboard industry-detail-shell settings-dashboard-shell ${mobileMenuOpen ? "is-mobile-menu-open" : ""}`} style={settingsStyle}>
     <aside className="dash-sidebar">
-      <div className="dash-brand"><span><img src={logoUrl} alt="" /></span><strong>Boost Vertex</strong></div>
+      <div className="settings-mobile-drawer-head">
+        <div className="dash-brand"><span><img src={logoUrl} alt="" /></span><strong>Boost Vertex</strong></div>
+        <button type="button" aria-label="Close menu" onClick={() => setMobileMenuOpen(false)}><X /></button>
+      </div>
       <nav aria-label="Admin navigation" className="dash-sidebar__nav">
-        {navigation.map(([label, Icon, path]) => <button key={label} className={label === "Settings" ? "is-active" : ""} onClick={() => setLocation(path)}><Icon />{label}</button>)}
+        {navigation.map(([label, Icon, path]) => <button key={label} className={label === "Settings" ? "is-active" : ""} onClick={() => navigate(path)}><Icon />{label}</button>)}
       </nav>
       <div className="dash-sidebar__bottom">
-        <button onClick={() => setLocation("/admin/profile")}><UserRound />Admin Profile</button>
-        <button onClick={() => { authService.logout(); setLocation("/admin/login"); }}><LogOut />Logout</button>
+        <button onClick={() => navigate("/admin/profile")}><UserRound />Admin Profile</button>
+        <button onClick={() => { authService.logout(); navigate("/admin/login"); }}><LogOut />Logout</button>
       </div>
     </aside>
 
+    <button className="settings-mobile-menu-backdrop" type="button" aria-label="Close menu" onClick={() => setMobileMenuOpen(false)} />
+
     <section className="dash-workspace">
       <div className="settings-mobile-topbar">
-        <button type="button" aria-label="Open menu"><Menu /></button>
+        <button type="button" aria-label="Open menu" onClick={() => setMobileMenuOpen(true)}><Menu /></button>
         <div className="settings-mobile-brand"><span><img src={logoUrl} alt="" /></span><strong>Boost Vertex</strong></div>
         <div className="settings-mobile-actions">
           <button type="button" aria-label="Search"><Search /></button>
