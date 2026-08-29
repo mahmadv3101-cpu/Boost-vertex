@@ -34,6 +34,7 @@ type ContactMessage = {
 };
 
 type ViewState = "loading" | "ready" | "error";
+type MessageStatus = "all" | "unread" | "read";
 
 const CONTACT_MESSAGES: ContactMessage[] = [
   {
@@ -126,6 +127,76 @@ function DeleteMessageModal({ message, onClose, onConfirm }: { message: ContactM
   </div>;
 }
 
+function ContactFilterPanel({
+  services,
+  status,
+  service,
+  startDate,
+  endDate,
+  onStatusChange,
+  onServiceChange,
+  onStartDateChange,
+  onEndDateChange,
+  onClear,
+  onCancel,
+  onApply,
+}: {
+  services: string[];
+  status: MessageStatus;
+  service: string;
+  startDate: string;
+  endDate: string;
+  onStatusChange: (value: MessageStatus) => void;
+  onServiceChange: (value: string) => void;
+  onStartDateChange: (value: string) => void;
+  onEndDateChange: (value: string) => void;
+  onClear: () => void;
+  onCancel: () => void;
+  onApply: () => void;
+}) {
+  return <div className="contact-filter-backdrop" onMouseDown={onCancel}>
+    <aside className="contact-filter-panel" onMouseDown={(event) => event.stopPropagation()} aria-label="Message filters">
+      <header>
+        <h2>Filters</h2>
+        <button type="button" onClick={onClear}>Clear All</button>
+      </header>
+
+      <div className="contact-filter-panel__body">
+        <label>
+          <span>Status</span>
+          <select value={status} onChange={(event) => onStatusChange(event.target.value as MessageStatus)}>
+            <option value="all">All Statuses</option>
+            <option value="unread">Unread</option>
+            <option value="read">Read</option>
+          </select>
+          <ChevronDown />
+        </label>
+
+        <label>
+          <span>Services</span>
+          <select value={service} onChange={(event) => onServiceChange(event.target.value)}>
+            <option value="all">All Services</option>
+            {services.map((item) => <option value={item} key={item}>{item}</option>)}
+          </select>
+          <ChevronDown />
+        </label>
+
+        <fieldset>
+          <legend>Date Range</legend>
+          <label><span>Start date</span><input type="date" value={startDate} onChange={(event) => onStartDateChange(event.target.value)} /></label>
+          <span className="contact-filter-date-separator">→</span>
+          <label><span>End date</span><input type="date" value={endDate} onChange={(event) => onEndDateChange(event.target.value)} /></label>
+        </fieldset>
+      </div>
+
+      <footer>
+        <button type="button" onClick={onCancel}>Cancel</button>
+        <button type="button" className="contact-filter-apply" onClick={onApply}>Apply Filters</button>
+      </footer>
+    </aside>
+  </div>;
+}
+
 function ContactMessageDetail({ message, onBack, onUpdate, onDelete }: {
   message: ContactMessage;
   onBack: () => void;
@@ -174,8 +245,15 @@ export function ContactMessagesWorkspace() {
   const [messages, setMessages] = useState(CONTACT_MESSAGES);
   const [viewState, setViewState] = useState<ViewState>("loading");
   const [query, setQuery] = useState("");
-  const [status, setStatus] = useState<"all" | "unread" | "read">("all");
+  const [status, setStatus] = useState<MessageStatus>("all");
   const [service, setService] = useState("all");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [draftStatus, setDraftStatus] = useState<MessageStatus>("all");
+  const [draftService, setDraftService] = useState("all");
+  const [draftStartDate, setDraftStartDate] = useState("");
+  const [draftEndDate, setDraftEndDate] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<ContactMessage | null>(null);
   const [page, setPage] = useState(1);
@@ -185,16 +263,29 @@ export function ContactMessagesWorkspace() {
     return () => window.clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (!filterOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape") setFilterOpen(false); };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [filterOpen]);
+
   const services = useMemo(() => Array.from(new Set(messages.map((message) => message.service))), [messages]);
   const filtered = useMemo(() => {
     const term = query.trim().toLowerCase();
+    const start = startDate ? new Date(`${startDate}T00:00:00`).getTime() : null;
+    const end = endDate ? new Date(`${endDate}T23:59:59`).getTime() : null;
+
     return messages.filter((message) => {
       const matchesQuery = !term || message.name.toLowerCase().includes(term) || message.email.toLowerCase().includes(term) || message.subject.toLowerCase().includes(term);
       const matchesStatus = status === "all" || (status === "unread" ? message.unread : !message.unread);
       const matchesService = service === "all" || message.service === service;
-      return matchesQuery && matchesStatus && matchesService;
+      const messageDate = new Date(message.submissionDate.split("·")[0].trim()).getTime();
+      const matchesStart = start === null || (!Number.isNaN(messageDate) && messageDate >= start);
+      const matchesEnd = end === null || (!Number.isNaN(messageDate) && messageDate <= end);
+      return matchesQuery && matchesStatus && matchesService && matchesStart && matchesEnd;
     });
-  }, [messages, query, service, status]);
+  }, [messages, query, service, status, startDate, endDate]);
 
   const selected = messages.find((message) => message.id === selectedId) || null;
 
@@ -210,18 +301,62 @@ export function ContactMessagesWorkspace() {
     </>;
   }
 
-  const clearFilters = () => { setQuery(""); setStatus("all"); setService("all"); setPage(1); };
-  const noFilters = !query.trim() && status === "all" && service === "all";
+  const clearFilters = () => {
+    setQuery("");
+    setStatus("all");
+    setService("all");
+    setStartDate("");
+    setEndDate("");
+    setDraftStatus("all");
+    setDraftService("all");
+    setDraftStartDate("");
+    setDraftEndDate("");
+    setPage(1);
+  };
+
+  const openFilters = () => {
+    setDraftStatus(status);
+    setDraftService(service);
+    setDraftStartDate(startDate);
+    setDraftEndDate(endDate);
+    setFilterOpen(true);
+  };
+
+  const applyFilters = () => {
+    setStatus(draftStatus);
+    setService(draftService);
+    setStartDate(draftStartDate);
+    setEndDate(draftEndDate);
+    setPage(1);
+    setFilterOpen(false);
+  };
+
+  const noFilters = !query.trim() && status === "all" && service === "all" && !startDate && !endDate;
 
   return <section className="contact-messages-module">
     <header className="contact-module-heading"><h1>Contact Messages</h1><p>View and Manage messages submitted through Boost vertex Website</p></header>
 
     {viewState !== "error" ? <div className="contact-toolbar">
       <label className={query ? "is-active" : ""}><Search /><input value={query} onChange={(event) => { setQuery(event.target.value); setPage(1); }} placeholder="Search senders by name..." /></label>
-      <label><span>Status:</span><select value={status} onChange={(event) => setStatus(event.target.value as "all" | "unread" | "read")}><option value="all">All</option><option value="unread">Unread</option><option value="read">Read</option></select><ChevronDown /></label>
+      <label><span>Status:</span><select value={status} onChange={(event) => setStatus(event.target.value as MessageStatus)}><option value="all">All</option><option value="unread">Unread</option><option value="read">Read</option></select><ChevronDown /></label>
       <label><span>Services</span><select value={service} onChange={(event) => setService(event.target.value)}><option value="all">All</option>{services.map((item) => <option value={item} key={item}>{item}</option>)}</select><ChevronDown /></label>
-      <button className={noFilters ? "" : "is-active"} onClick={clearFilters}><span className="contact-filter-funnel" />Filter</button>
+      <button type="button" className={noFilters ? "" : "is-active"} onClick={openFilters}><span className="contact-filter-funnel" />Filter</button>
     </div> : null}
+
+    {filterOpen ? <ContactFilterPanel
+      services={services}
+      status={draftStatus}
+      service={draftService}
+      startDate={draftStartDate}
+      endDate={draftEndDate}
+      onStatusChange={setDraftStatus}
+      onServiceChange={setDraftService}
+      onStartDateChange={setDraftStartDate}
+      onEndDateChange={setDraftEndDate}
+      onClear={() => { setDraftStatus("all"); setDraftService("all"); setDraftStartDate(""); setDraftEndDate(""); }}
+      onCancel={() => setFilterOpen(false)}
+      onApply={applyFilters}
+    /> : null}
 
     {viewState === "loading" ? <div className="contact-table contact-table--loading">
       <div className="contact-table__head"><span><i /></span><span>SENDER</span><span>SERVICE/SUBJECT</span><span>MESSAGE PREVIEW</span><span>DATE</span></div>
