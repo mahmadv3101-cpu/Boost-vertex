@@ -10,6 +10,7 @@ import "./AdminSettingsPrecisionFix.css";
 import "./AdminSettingsMobile.css";
 import { settingsAvatarSrc } from "./SettingsAvatar";
 import { SettingsWorkspace } from "./AdminSettingsModule";
+import { AdminLogoutModule } from "./AdminLogoutModule";
 
 const logoUrl = "/assets/managed/boost-vertex-logo-2026_bf191d1a.jpeg";
 
@@ -28,8 +29,10 @@ const navigation = [
 export function SettingsDashboard() {
   const [, setLocation] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [logoutOpen, setLogoutOpen] = useState(false);
   const settingsStyle = { "--settings-avatar-image": `url("${settingsAvatarSrc}")` } as React.CSSProperties;
   const navigate = (path: string) => { setMobileMenuOpen(false); setLocation(path); };
+  const completeLogout = () => { authService.logout(); setLocation("/admin/login"); };
 
   return <main className={`admin-dashboard industry-detail-shell settings-dashboard-shell ${mobileMenuOpen ? "is-mobile-menu-open" : ""}`} style={settingsStyle}>
     <aside className="dash-sidebar">
@@ -42,7 +45,7 @@ export function SettingsDashboard() {
       </nav>
       <div className="dash-sidebar__bottom">
         <button onClick={() => navigate("/admin/profile")}><UserRound />Admin Profile</button>
-        <button onClick={() => { authService.logout(); navigate("/admin/login"); }}><LogOut />Logout</button>
+        <button onClick={() => { setMobileMenuOpen(false); setLogoutOpen(true); }}><LogOut />Logout</button>
       </div>
     </aside>
 
@@ -71,5 +74,7 @@ export function SettingsDashboard() {
       </header>
       <SettingsWorkspace />
     </section>
+
+    <AdminLogoutModule open={logoutOpen} onCancel={() => setLogoutOpen(false)} onComplete={completeLogout} />
   </main>;
 }
