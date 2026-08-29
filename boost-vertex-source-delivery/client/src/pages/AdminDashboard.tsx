@@ -60,6 +60,7 @@ import { IndustryModuleWorkspace } from "./AdminIndustryModule";
 import { CaseStudiesModuleWorkspace } from "./AdminCaseStudiesModule";
 import { BlogResourcesModuleWorkspace } from "./AdminBlogResourcesModule";
 import { MediaLibraryWorkspace } from "./AdminMediaLibraryModule";
+import { ContactMessagesWorkspace } from "./AdminContactMessagesModule";
 import { adminModuleDestination, adminScreenLabel } from "./adminNavigation";
 
 const logoUrl = "/assets/managed/boost-vertex-logo-2026_bf191d1a.jpeg";
@@ -623,7 +624,7 @@ export default function AdminDashboard() {
           <section className="dash-card dash-status-card"><h2>Leads by Status</h2><div className="dash-donut"><span><strong>848</strong><small>Total<br />Leads</small></span></div><ul><li><i className="status-new" />New <span>220 (26%)</span></li><li><i className="status-contacted" />Contacted <span>180 (21%)</span></li><li><i className="status-qualified" />Qualified <span>155 (18%)</span></li><li><i className="status-converted" />Converted <span>123 (15%)</span></li><li><i className="status-closed" />Closed <span>170 (20%)</span></li></ul></section>
           <section className="dash-card dash-actions"><h2>Quick Actions</h2><div>{quickActions.map(([Icon, line1, line2]) => <button key={`${line1}-${line2}`} onClick={() => toast.info(`${line1} ${line2} is a frontend-only action until the backend API is connected.`)}><Icon /><span>{line1}<br />{line2}</span></button>)}</div></section>
         </section>
-      </div> : active === "Leads" ? <LeadModuleWorkspace onMenu={() => setMobileMenuOpen(true)} /> : active === "Services" ? <ServicesModuleWorkspace /> : active === "Industries" ? <IndustryModuleWorkspace onMenu={() => setMobileMenuOpen(true)} onSettings={() => handleNav("Settings")} /> : active === "Case Studies" ? <CaseStudiesModuleWorkspace onMenu={() => setMobileMenuOpen(true)} onSettings={() => handleNav("Settings")} /> : active === "Blog / Resources" ? <BlogResourcesModuleWorkspace /> : active === "Media Library" ? <MediaLibraryWorkspace /> : <ModuleView label={active} />}
+      </div> : active === "Leads" ? <LeadModuleWorkspace onMenu={() => setMobileMenuOpen(true)} /> : active === "Services" ? <ServicesModuleWorkspace /> : active === "Industries" ? <IndustryModuleWorkspace onMenu={() => setMobileMenuOpen(true)} onSettings={() => handleNav("Settings")} /> : active === "Case Studies" ? <CaseStudiesModuleWorkspace onMenu={() => setMobileMenuOpen(true)} onSettings={() => handleNav("Settings")} /> : active === "Blog / Resources" ? <BlogResourcesModuleWorkspace /> : active === "Media Library" ? <MediaLibraryWorkspace /> : active === "Contact Messages" ? <ContactMessagesWorkspace /> : <ModuleView label={active} />}
       </section>
 
     <nav className="dash-mobile-bottom-nav" aria-label="Mobile admin navigation">
