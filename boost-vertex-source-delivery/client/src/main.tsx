@@ -4,6 +4,7 @@ import "./index.css";
 import "./styles/SiteMotion.css";
 import "./styles/MediaMobileHotfix.css";
 import "./styles/AdminContactMessagesMobile.css";
+import "./styles/ContactMobileHotfix.css";
 
 const analyticsEndpoint = import.meta.env.VITE_ANALYTICS_ENDPOINT?.trim();
 const analyticsWebsiteId = import.meta.env.VITE_ANALYTICS_WEBSITE_ID?.trim();
