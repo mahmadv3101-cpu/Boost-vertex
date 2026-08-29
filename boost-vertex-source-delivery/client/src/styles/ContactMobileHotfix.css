@@ -1,0 +1,6 @@
+@media (max-width: 640px) {
+  body:has(.contact-messages-module) .dash-mobile-bottom-nav,
+  body:has(.contact-detail) .dash-mobile-bottom-nav {
+    display: none !important;
+  }
+}
