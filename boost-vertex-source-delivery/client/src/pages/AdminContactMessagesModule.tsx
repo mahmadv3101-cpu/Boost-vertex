@@ -233,8 +233,8 @@ export function ContactMessagesWorkspace() {
     : <div className="contact-table">
       <div className="contact-table__head"><span><i /></span><span>SENDER</span><span>SERVICE/SUBJECT</span><span>MESSAGE PREVIEW</span><span>DATE</span></div>
       {filtered.slice(0, 5).map((message) => <button className={`contact-table__row${message.unread ? " is-unread" : ""}`} key={message.id} onClick={() => setSelectedId(message.id)}>
-        <span><i />{message.unread ? <em /> : null}</span>
-        <span><strong>{message.name}</strong><small>{message.email}</small></span>
+        <span><i /></span>
+        <span className="contact-sender-cell"><span className="contact-sender-name-line">{message.unread ? <em className="contact-unread-dot" /> : null}<strong>{message.name}</strong></span><small>{message.email}</small></span>
         <span><strong>{message.service}</strong></span>
         <span>{message.preview}</span>
         <span><strong>{message.date}</strong></span>
