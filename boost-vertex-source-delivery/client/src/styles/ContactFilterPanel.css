@@ -1,0 +1,220 @@
+.contact-filter-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  justify-content: flex-end;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(2px);
+}
+
+.contact-filter-panel {
+  width: min(420px, 100%);
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #0b0d0c;
+  border-left: 1px solid #343936;
+  color: #f5f6f1;
+  font-family: "Inter", Arial, sans-serif;
+  box-shadow: -20px 0 50px rgba(0, 0, 0, 0.28);
+}
+
+.contact-filter-panel > header {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  border-bottom: 1px solid #303532;
+}
+
+.contact-filter-panel > header h2 {
+  margin: 0;
+  font-family: "Chivo", sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.contact-filter-panel > header button {
+  border: 0;
+  background: transparent;
+  color: #c8ff00;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.contact-filter-panel__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 28px 24px;
+}
+
+.contact-filter-panel__body > label,
+.contact-filter-panel fieldset > label {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.contact-filter-panel label > span,
+.contact-filter-panel legend {
+  color: #eff1eb;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.contact-filter-panel select,
+.contact-filter-panel input[type="date"] {
+  width: 100%;
+  height: 46px;
+  padding: 0 42px 0 14px;
+  border: 1px solid #515953;
+  border-radius: 6px;
+  outline: none;
+  background: #262b28;
+  color: #f0f2ed;
+  font: inherit;
+  appearance: none;
+}
+
+.contact-filter-panel label > svg {
+  position: absolute;
+  right: 14px;
+  bottom: 13px;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+}
+
+.contact-filter-panel fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.contact-filter-panel fieldset legend {
+  margin-bottom: 12px;
+}
+
+.contact-filter-panel fieldset {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: end;
+}
+
+.contact-filter-panel fieldset legend {
+  grid-column: 1 / -1;
+}
+
+.contact-filter-panel fieldset label span {
+  color: #aeb5a8;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.contact-filter-panel input[type="date"] {
+  padding-right: 10px;
+  color-scheme: dark;
+}
+
+.contact-filter-date-separator {
+  padding-bottom: 13px;
+  color: #91988f;
+}
+
+.contact-filter-panel > footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 18px 24px 24px;
+  border-top: 1px solid #303532;
+}
+
+.contact-filter-panel > footer button {
+  height: 46px;
+  border: 1px solid #515953;
+  border-radius: 7px;
+  background: #202421;
+  color: #f5f6f1;
+  font-family: "Chivo", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.contact-filter-panel > footer .contact-filter-apply {
+  border-color: #b7e500;
+  background: #c8ff00;
+  color: #0d100c;
+}
+
+/* Disable the old CSS-only mobile focus sheet now that the real panel exists. */
+@media (max-width: 640px) {
+  .contact-toolbar:has(>button:focus)::before,
+  .contact-toolbar:has(select:focus)::before,
+  .contact-toolbar:has(>button:focus)::after,
+  .contact-toolbar:has(select:focus)::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  .contact-toolbar:has(>button:focus) label:not(:first-child),
+  .contact-toolbar:has(select:focus) label:not(:first-child) {
+    display: none !important;
+  }
+
+  .contact-filter-backdrop {
+    align-items: flex-end;
+    justify-content: stretch;
+  }
+
+  .contact-filter-panel {
+    width: 100%;
+    min-height: 0;
+    max-height: calc(100dvh - 72px);
+    border-left: 0;
+    border-top: 1px solid #343936;
+    border-radius: 0;
+    overflow-y: auto;
+  }
+
+  .contact-filter-panel > header {
+    min-height: 64px;
+    padding: 0 20px;
+  }
+
+  .contact-filter-panel > header h2 {
+    font-size: 18px;
+  }
+
+  .contact-filter-panel__body {
+    gap: 22px;
+    padding: 22px 20px 26px;
+  }
+
+  .contact-filter-panel fieldset {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .contact-filter-panel fieldset legend {
+    grid-column: auto;
+  }
+
+  .contact-filter-date-separator {
+    display: none;
+  }
+
+  .contact-filter-panel > footer {
+    position: sticky;
+    bottom: 0;
+    padding: 14px 20px 18px;
+    background: #0b0d0c;
+  }
+}
