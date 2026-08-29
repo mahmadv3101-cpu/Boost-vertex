@@ -5,6 +5,8 @@ import "./AdminDashboard.css";
 import "./AdminDashboardInteraction.css";
 import "./AdminDashboardAuditRefinement.css";
 import "./AdminSettingsProfileRefinement.css";
+import "./AdminSettingsPrecisionFix.css";
+import { settingsAvatarSrc } from "./SettingsAvatar";
 import { SettingsWorkspace } from "./AdminSettingsModule";
 
 const logoUrl = "/assets/managed/boost-vertex-logo-2026_bf191d1a.jpeg";
@@ -23,7 +25,8 @@ const navigation = [
 
 export function SettingsDashboard() {
   const [, setLocation] = useLocation();
-  return <main className="admin-dashboard industry-detail-shell settings-dashboard-shell">
+  const settingsStyle = { "--settings-avatar-image": `url("${settingsAvatarSrc}")` } as React.CSSProperties;
+  return <main className="admin-dashboard industry-detail-shell settings-dashboard-shell" style={settingsStyle}>
     <aside className="dash-sidebar">
       <div className="dash-brand"><span><img src={logoUrl} alt="" /></span><strong>Boost Vertex</strong></div>
       <nav aria-label="Admin navigation" className="dash-sidebar__nav">
