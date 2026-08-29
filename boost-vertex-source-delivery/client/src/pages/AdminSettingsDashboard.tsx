@@ -1,4 +1,4 @@
-import { Bell, BriefcaseBusiness, Building2, FolderKanban, Image, LayoutDashboard, LogOut, MessageSquare, Newspaper, Search, Settings, UserRound, UsersRound } from "lucide-react";
+import { Bell, BriefcaseBusiness, Building2, FolderKanban, Image, LayoutDashboard, LogOut, Menu, MessageSquare, MoreHorizontal, Newspaper, PlusCircle, Search, Settings, UserRound, UsersRound } from "lucide-react";
 import { useLocation } from "wouter";
 import { authService } from "@/services/authService";
 import "./AdminDashboard.css";
@@ -6,6 +6,7 @@ import "./AdminDashboardInteraction.css";
 import "./AdminDashboardAuditRefinement.css";
 import "./AdminSettingsProfileRefinement.css";
 import "./AdminSettingsPrecisionFix.css";
+import "./AdminSettingsMobile.css";
 import { settingsAvatarSrc } from "./SettingsAvatar";
 import { SettingsWorkspace } from "./AdminSettingsModule";
 
@@ -39,6 +40,17 @@ export function SettingsDashboard() {
     </aside>
 
     <section className="dash-workspace">
+      <div className="settings-mobile-topbar">
+        <button type="button" aria-label="Open menu"><Menu /></button>
+        <div className="settings-mobile-brand"><span><img src={logoUrl} alt="" /></span><strong>Boost Vertex</strong></div>
+        <div className="settings-mobile-actions">
+          <button type="button" aria-label="Search"><Search /></button>
+          <button type="button" aria-label="Notifications"><Bell /></button>
+          <button type="button" aria-label="Settings"><Settings /></button>
+          <span className="settings-mobile-avatar" />
+        </div>
+      </div>
+
       <header className="dash-topbar">
         <label className="dash-search"><Search /><input placeholder="Search anything..." /><kbd>⌘ K</kbd></label>
         <div className="dash-topbar__right">
@@ -49,6 +61,14 @@ export function SettingsDashboard() {
         </div>
       </header>
       <SettingsWorkspace />
+
+      <nav className="settings-mobile-bottomnav" aria-label="Mobile admin navigation">
+        <button type="button" onClick={() => setLocation("/admin/dashboard")}><LayoutDashboard /><span>Dashboard</span></button>
+        <button type="button" onClick={() => setLocation("/admin/leads")}><UsersRound /><span>Leads</span></button>
+        <button type="button"><PlusCircle /><span>Add</span></button>
+        <button type="button" onClick={() => setLocation("/admin/contact-messages")}><MessageSquare /><span>Messages</span></button>
+        <button type="button" className="is-active"><MoreHorizontal /><span>More</span></button>
+      </nav>
     </section>
   </main>;
 }
