@@ -1,4 +1,4 @@
-import { Bell, BriefcaseBusiness, Building2, FolderKanban, Image, LayoutDashboard, LogOut, Menu, MessageSquare, MoreHorizontal, Newspaper, PlusCircle, Search, Settings, UserRound, UsersRound } from "lucide-react";
+import { Bell, BriefcaseBusiness, Building2, FolderKanban, Image, LayoutDashboard, LogOut, Menu, MessageSquare, Newspaper, Search, Settings, UserRound, UsersRound } from "lucide-react";
 import { useLocation } from "wouter";
 import { authService } from "@/services/authService";
 import "./AdminDashboard.css";
@@ -61,14 +61,6 @@ export function SettingsDashboard() {
         </div>
       </header>
       <SettingsWorkspace />
-
-      <nav className="settings-mobile-bottomnav" aria-label="Mobile admin navigation">
-        <button type="button" onClick={() => setLocation("/admin/dashboard")}><LayoutDashboard /><span>Dashboard</span></button>
-        <button type="button" onClick={() => setLocation("/admin/leads")}><UsersRound /><span>Leads</span></button>
-        <button type="button"><PlusCircle /><span>Add</span></button>
-        <button type="button" onClick={() => setLocation("/admin/contact-messages")}><MessageSquare /><span>Messages</span></button>
-        <button type="button" className="is-active"><MoreHorizontal /><span>More</span></button>
-      </nav>
     </section>
   </main>;
 }
